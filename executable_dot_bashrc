@@ -1,0 +1,64 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+PS1='[\u@\h \W]\$ '
+. "$HOME/.cargo/env"
+
+
+##-----------------------------------------------------
+## better-ls
+if [ -f /home/will/.config/synth-shell/better-ls.sh ] && [ -n "$( echo $- | grep i )" ]; then
+	source /home/will/.config/synth-shell/better-ls.sh
+fi
+
+##-----------------------------------------------------
+## alias
+if [ -f /home/will/.config/synth-shell/alias.sh ] && [ -n "$( echo $- | grep i )" ]; then
+	source /home/will/.config/synth-shell/alias.sh
+fi
+
+##-----------------------------------------------------
+## better-history
+if [ -f /home/will/.config/synth-shell/better-history.sh ] && [ -n "$( echo $- | grep i )" ]; then
+	source /home/will/.config/synth-shell/better-history.sh
+fi
+export PATH=$PATH:/home/will/.spicetify
+
+# Set up Node Version Manager
+source /usr/share/nvm/init-nvm.sh
+export EDITOR=lvim
+
+# thefuck
+eval $(thefuck --alias)
+alias oops=fuck
+
+# Other aliases
+alias sus="systemctl suspend"
+
+alias nvp=nvimpager
+alias v=lvim
+alias sv=sudoedit
+
+alias dv_kb="setxkbmap -model pc105 -layout us\(dvorak\),us -option caps:swapescape,grp:ctrls_toggle"
+
+# Make a folder and move into it
+mkcd ()
+{
+  mkdir -p -- "$1" && cd -P -- "$1"
+}
+
+# Move into a folder and ls there
+cdl ()
+{
+  cd "$1" && ls
+}
+
+[ -f "/home/will/.ghcup/env" ] && source "/home/will/.ghcup/env" # ghcup-env
+
+# Zoxide
+eval "$(zoxide init bash)"
