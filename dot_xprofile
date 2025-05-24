@@ -1,4 +1,4 @@
 #!/bin/sh
-# Might have some overlap with xinitrc but idk
-xrandr --output eDP-1 --mode 1920x1080 --rate 60.00 --output HDMI-1 --mode 1920x1080 --rate 120.00 --left-of eDP-1 --primary
-exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr
+xrandr --setprovideroutputsource modesetting NVIDIA-0
+xrandr --output eDP-1 --mode 1920x1080 --rate 60.00 --output HDMI-1 --mode 1920x1080 --rate 120.00 --right-of eDP-1 --primary ||\
+xrandr --output eDP-1 --mode 1920x1080 --rate 60.00 --primary

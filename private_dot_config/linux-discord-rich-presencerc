@@ -1,0 +1,19 @@
+ 
+[
+    {
+        "application_id": 100,
+        "state": "Constant euphoria",
+        "details": "It's never ending",
+        "large_image": {
+            "key": "/home/will/Pictures/DPC/Archlinux-icon-crystal-64.svg_.png",
+            "text": "Arch Linux"
+        },
+        "small_image": null,
+        "start_timestamp": null,
+        "end_timestamp": null,
+        "party": [
+            1,
+            1
+        ]
+    }
+]

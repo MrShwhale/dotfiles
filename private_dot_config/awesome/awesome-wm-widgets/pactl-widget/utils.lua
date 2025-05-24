@@ -9,7 +9,7 @@ function utils.split(string_to_split, separator)
     if separator == nil then separator = "%s" end
     local t = {}
 
-    for str in string.gmatch(string_to_split, "([^".. separator .."]+)") do
+    for str in string.gmatch(string_to_split, "([^" .. separator .. "]+)") do
         table.insert(t, str)
     end
 
@@ -23,6 +23,5 @@ function utils.popen_and_return(cmd)
 
     return result
 end
-
 
 return utils

@@ -1,0 +1,7 @@
+{
+    "baseAddress": 0,
+    "currPage": 0,
+    "displayName": "crackme",
+    "path": "/home/will/Documents/hacking/crackmes/crackme",
+    "type": "hex.builtin.provider.file"
+}

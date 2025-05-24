@@ -1,0 +1,143 @@
+require("config.lazy")
+
+-- Make sure to setup `mapleader` and `maplocalleader` before
+-- loading lazy.nvim so that mappings are correct.
+-- This is also a good place to setup other settings (vim.opt)
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
+require("lazy").setup("plugins")
+
+-- Do all the plugin things
+plugins = {
+    -- NAVIGATION STUFF --
+    {
+        -- Finding all the stuff
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.8',
+        dependencies = { 'nvim-lua/plenary.nvim' }
+    },
+    -- LSP STUFF --
+    {
+        -- COQ completion
+        "neovim/nvim-lspconfig", -- REQUIRED: for native Neovim LSP integration
+        lazy = false,            -- REQUIRED: tell lazy.nvim to start this plugin at startup
+        dependencies = {
+            -- main one
+            { "ms-jpq/coq_nvim",       branch = "coq" },
+
+            -- 9000+ Snippets
+            { "ms-jpq/coq.artifacts",  branch = "artifacts" },
+
+            -- lua & third party sources -- See https://github.com/ms-jpq/coq.thirdparty
+            -- Need to **configure separately**
+            { 'ms-jpq/coq.thirdparty', branch = "3p" }
+            -- - shell repl
+            -- - nvim lua api
+            -- - scientific calculator
+            -- - comment banner
+            -- - etc
+        },
+        init = function()
+            vim.g.coq_settings = {
+                auto_start = true, -- if you want to start COQ at startup
+                -- Your COQ settings here
+            }
+        end,
+        config = function()
+            -- Your LSP settings here
+        end,
+    },
+    {
+        -- LSP manager
+        "williamboman/mason.nvim",
+    },
+    -- THEME STUFF --
+    {
+        -- Lunar theme
+        "lunarvim/lunar.nvim",
+    },
+    -- FUN STUFF --
+    {
+        -- Funny cellular automaton for when I get bored
+        'eandrju/cellular-automaton.nvim',
+    },
+    -- MISC STUFF --
+    {
+        -- File explorer
+        "ms-jpq/chadtree",
+    },
+    {
+        -- Better logging? idk, its a lunar thing
+        "Tastyep/structlog.nvim",
+    },
+    {
+        -- Helps you see keybinds
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        },
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Local Keymaps (which-key)",
+            },
+        },
+    },
+}
+
+-- LSP CONFIG --
+vim.lsp.enable('pyright')
+
+-- CUSTOM KEYBINDS --
+-- TODO ensure that this is the best way to send this command
+vim.keymap.set("n", "<leader>w", ":w<CR>")
+vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>")
+
+-- MISC VIM COMMANDS
+vim.o.wrap = true
+vim.o.mouse = "a"
+vim.o.visualbell = true
+
+-- Set up line numbers
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.numberwidth = 4
+
+-- Handle indentation
+vim.o.tabstop = 4
+vim.o.expandtab = true
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
+vim.o.autoindent = true
+vim.o.smartindent = true
+
+-- Bottom line
+vim.o.showmode = true
+vim.o.showcmd = true
+vim.o.wildmenu = true
+vim.o.wildmode = "longest:full,full"
+vim.o.ruler = true
+vim.o.cursorline = true
+
+-- Searching
+vim.o.hlsearch = true
+vim.o.incsearch = true
+-- hi CursorLine term=bold cterm=bold guibg=Grey40
+
+-- Misc
+vim.o.foldmethod = "indent"
+vim.o.background = "dark"
+vim.o.autoread = true
+vim.o.encoding = "utf-8"
+
+vim.g.netrw_banner = 0
+vim.g.netrw_browse_split = 4
+vim.g.netrw_altv = 1
+vim.g.netrw_liststyle = 3

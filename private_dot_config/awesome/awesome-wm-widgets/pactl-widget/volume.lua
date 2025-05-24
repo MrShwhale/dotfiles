@@ -166,15 +166,18 @@ local function worker(user_args)
     end
 
     local function update_graphic(widget)
-        local vol = pactl.get_volume(device)
-        if vol ~= nil then
-            widget:set_volume_level(vol)
-        end
-
         if pactl.get_mute(device) then
             widget:mute()
         else
             widget:unmute()
+        end
+
+        -- No, you don't know why you had to add this line to enable instant updates
+        widget.is_muted = pactl.get_mute(device)
+
+        local vol = pactl.get_volume(device)
+        if vol ~= nil then
+            widget:set_volume_level(vol)
         end
     end
 

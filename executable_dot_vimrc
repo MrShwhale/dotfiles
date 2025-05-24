@@ -1,0 +1,76 @@
+" 
+set nocompatible
+filetype off
+
+"set rtp+=/usr/share/vim/vimfiles/autoload/vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/vundle.vim'
+Plugin 'ms-jpq/coq_nvim'
+Plugin 'ms-jpq/coq.artifacts'
+Plugin 'valloric/youcompleteme'
+Plugin 'rust-lang/rust.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'bling/vim-airline'
+Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-sleuth'
+Plugin 'tpope/vim-vinegar'
+Plugin 'iamcco/markdown-preview.nvim'
+Plugin 'kshenoy/vim-signature'
+Plugin 'mattn/emmet-vim'
+Plugin 'scrooloose/nerdtree'
+call vundle#end()
+
+filetype plugin indent on
+
+" Specify .md files as markdown
+au BufRead,BufNewFile *.md setlocal ft=markdown
+
+" Settings
+syntax enable
+set clipboard+=unnamedplus
+
+set wrap
+set mouse=a
+set visualbell
+
+set number relativenumber
+set numberwidth=4
+
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+set smartindent
+
+set showmode
+set showcmd
+set wildmenu
+set wildmode=longest:full,full
+set ruler
+set encoding=utf-8
+set hlsearch
+set incsearch
+set background=dark
+set autoread
+
+set cursorline
+hi CursorLine term=bold cterm=bold guibg=Grey40
+
+set foldmethod=manual
+
+set path+=**
+
+let g:netrw_banner=0
+let g:netrw_browse_split=4
+let g:netrw_altv=1
+let g:netrw_liststyle=3
+
+" Bind insert a single character to ctrl+i
+nnoremap <C-i> i_<Esc>r
+"

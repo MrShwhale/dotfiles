@@ -1,0 +1,261 @@
+-- Lazy plugins to use
+plugins = {
+    {
+        -- Funny cellular automaton for when I get bored
+        'eandrju/cellular-automaton.nvim',
+        lazy = false,
+    },
+    {
+        -- Treesitter; syntax highlighting and dependency
+        'nvim-treesitter/nvim-treesitter',
+        lazy = false,
+    },
+    {
+        -- Lets nvim work with kitty windows as well
+        'mrjones2014/smart-splits.nvim',
+        lazy = false,
+        build = './kitty/install-kittens.bash'
+    },
+    {
+        -- Allows for better kitty interaction
+        'mikesmithgh/kitty-scrollback.nvim',
+        enabled = true,
+        lazy = true,
+        cmd = { 'KittyScrollbackGenerateKittens', 'KittyScrollbackCheckHealth' },
+        version = '*', -- latest stable version, may have breaking changes if major version changed
+        config = function()
+            require('kitty-scrollback').setup()
+        end,
+    },
+    {
+        -- Configurable statusline
+        'nvim-lualine/lualine.nvim',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- LSP configurer
+        'neovim/nvim-lspconfig',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Autocomplete
+        'ms-jpq/coq_nvim',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Autocomplete snippets
+        'ms-jpq/coq.artifacts',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Better word/phrase surrounding
+        'kylechui/nvim-surround',
+        version = "*", -- Use for stability; omit to use `main` branch for the latest features
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({
+                -- Configuration here, or leave empty to use defaults
+            })
+        end,
+	enabled = true,
+	lazy = false,
+    },
+    {
+        -- Markdown Preview
+        'iamcco/markdown-preview.nvim',
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function() vim.fn["mkdp#util#install"]() end,
+	enabled = true,
+	lazy = true,
+    },
+    {
+        -- Register usage
+        'gennaro-tedesco/nvim-peekup',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Better marks
+        'chentoast/marks.nvim',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Better file tree
+        'ms-jpq/chadtree',
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Better Jumps (again; only use one)
+        'smoka7/hop.nvim',
+        version = "*",
+        opts = {},
+        enabled = true,
+        lazy = false,
+    },
+    {
+        -- Smart pairng for parenthesis and such
+        'ZhiyuanLck/smart-pairs',
+        enabled = true,
+        lazy = false,
+    },
+
+}
+
+-- Lazy plugin installer
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup(plugins, opts)
+
+vim.cmd([[
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath = &runtimepath
+source ~/.vimrc
+]])
+
+-- startup commands
+vim.cmd([[
+:TSUpdate
+:COQnow --shut-up
+]])
+
+-- Treesitter setup
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all" (the five listed parsers should always be installed)
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "rust", "python", "javascript" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = false,
+
+  -- List of parsers to ignore installing (or "all")
+  -- ignore_install = { },
+
+  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+  highlight = {
+    enable = true,
+
+    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+    -- the name of the parser)
+    -- list of language that will be disabled
+    -- disable = { "c", "rust" },
+    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+    end,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+
+-- Change colorscheme
+-- vim.cmd[[colorscheme tokyonight]]
+
+-- Kitty scrollback
+require('kitty-scrollback').setup()
+
+-- Setup language servers.
+local lspconfig = require('lspconfig')
+lspconfig.pyright.setup {}
+lspconfig.tsserver.setup {}
+lspconfig.rust_analyzer.setup {
+  -- Server-specific settings. See `:help lspconfig-setup`
+  settings = {
+    ['rust-analyzer'] = {},
+  },
+}
+
+-- Register helper
+local peekup = require('nvim-peekup.config')
+peekup.on_keystroke.paste_reg = "+"
+peekup.on_keystroke.delay = "300ms"
+
+-- Marks setup
+require('marks').setup {
+  -- whether to map keybinds or not. default true
+  default_mappings = true,
+  -- which builtin marks to show. default {}
+  builtin_marks = { ".", "<", ">", "^" },
+  -- whether movements cycle back to the beginning/end of buffer. default true
+  cyclic = true,
+  -- whether the shada file is updated after modifying uppercase marks. default false
+  force_write_shada = false,
+  -- how often (in ms) to redraw signs/recompute mark positions. 
+  -- higher values will have better performance but may cause visual lag, 
+  -- while lower values may cause performance penalties. default 150.
+  refresh_interval = 250,
+  -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
+  -- marks, and bookmarks.
+  -- can be either a table with all/none of the keys, or a single number, in which case
+  -- the priority applies to all marks.
+  -- default 10.
+  sign_priority = { lower=10, upper=15, builtin=8, bookmark=20 },
+  -- disables mark tracking for specific filetypes. default {}
+  excluded_filetypes = {},
+  -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
+  -- sign/virttext. Bookmarks can be used to group together positions and quickly move
+  -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
+  -- default virt_text is "".
+  bookmark_0 = {
+    sign = "⚑",
+    virt_text = "Group 1",
+    -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
+    -- defaults to false.
+    annotate = false,
+  },
+  mappings = {}
+}
+
+-- CHADTree setup
+vim.cmd('nnoremap <leader>v <cmd>CHADopen<cr>')
+
+-- Hop setup
+local hop = require('hop')
+local directions = require('hop.hint').HintDirection
+vim.keymap.set('', 'f', function()
+  hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = false })
+end, {remap=true})
+vim.keymap.set('', 'F', function()
+  hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = false })
+end, {remap=true})
+vim.keymap.set('', 't', function()
+  hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = false, hint_offset = -1 })
+end, {remap=true})
+vim.keymap.set('', 'T', function()
+  hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = false, hint_offset = 1 })
+end, {remap=true})
+
+vim.cmd('nnoremap <leader>w <cmd>HopWord<cr>')
+
+-- Autocomplete pairs
+require('pairs'):setup(opts)

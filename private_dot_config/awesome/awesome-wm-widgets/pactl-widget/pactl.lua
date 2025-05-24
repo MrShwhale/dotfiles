@@ -58,7 +58,6 @@ function pactl.get_sinks_and_sources()
     local in_section
 
     for line in utils.popen_and_return('pactl list'):gmatch('[^\r\n]*') do
-
         if string.match(line, '^%a+ #') then
             in_section = nil
         end
@@ -83,7 +82,7 @@ function pactl.get_sinks_and_sources()
         -- Found a new subsection
         if in_section ~= nil and string.match(line, '^\t%a+:$') then
             in_section = utils.trim(line):lower()
-            in_section = string.sub(in_section, 1, #in_section-1)
+            in_section = string.sub(in_section, 1, #in_section - 1)
 
             if in_section == 'ports' then
                 ports = {}
@@ -119,6 +118,5 @@ end
 function pactl.set_default(type, name)
     spawn('pactl set-default-' .. type .. ' "' .. name .. '"', false)
 end
-
 
 return pactl

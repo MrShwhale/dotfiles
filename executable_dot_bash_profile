@@ -1,0 +1,11 @@
+#
+# ~/.bash_profile
+#
+
+[[ -f ~/.bashrc ]] && . ~/.bashrc
+. "$HOME/.cargo/env"
+export PATH=$PATH:/home/will/.spicetify
+export EDITOR="lvim"
+
+# Created by `pipx` on 2024-08-03 06:08:30
+export PATH="$PATH:/home/will/.local/bin"

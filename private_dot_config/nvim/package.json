@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ts-lsp-client": "^1.0.3"
+  }
+}
