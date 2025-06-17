@@ -21,7 +21,7 @@
     },
     "hex.builtin.achievement.misc": {
         "hex.builtin.achievement.misc.analyze_file.name": 0,
-        "hex.builtin.achievement.misc.download_from_store.name": 0,
+        "hex.builtin.achievement.misc.download_from_store.name": 1,
         "hex.hashes.achievement.misc.create_hash.name": 0
     },
     "hex.builtin.achievement.patterns": {
@@ -31,7 +31,7 @@
         "hex.builtin.achievement.patterns.place_menu.name": 0
     },
     "hex.builtin.achievement.starting_out": {
-        "hex.builtin.achievement.starting_out.crash.name": 0,
+        "hex.builtin.achievement.starting_out.crash.name": 1,
         "hex.builtin.achievement.starting_out.docs.name": 0,
         "hex.builtin.achievement.starting_out.open_file.name": 1,
         "hex.builtin.achievement.starting_out.save_project.name": 0
